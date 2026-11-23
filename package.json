@@ -24,7 +24,7 @@
       "output": "release"
     },
     "files": [
-      "dist/**/*",
+      "dist-free/**/*",
       "static/**/*"
     ],
     "linux": {
