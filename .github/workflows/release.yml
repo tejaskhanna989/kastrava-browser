@@ -59,6 +59,8 @@ jobs:
           KAS_STORE: https://kastrava.in
       - name: Package Windows installers (unsigned)
         run: npx electron-builder --win --x64 --publish never
+        env:
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache
       - uses: actions/upload-artifact@v4
         with:
           name: Kastrava-win
@@ -100,6 +102,8 @@ jobs:
           KAS_STORE: https://kastrava.in
       - name: Package Linux AppImage
         run: npx electron-builder --linux --x64 --publish never
+        env:
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache
       - name: Create release directory structure
         run: |
           mkdir -p release
@@ -142,7 +146,9 @@ jobs:
           KAS_API: https://api.kastrava.in
           KAS_STORE: https://kastrava.in
       - name: Package macOS app
-        run: npx electron-builder --mac dmg --x64 --arm64 --publish never
+        run: npx electron-builder --mac --x64 --arm64 --publish never
+        env:
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache
       - uses: actions/upload-artifact@v4
         with:
           name: Kastrava-macos
