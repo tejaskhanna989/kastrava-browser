@@ -28,18 +28,13 @@
       "static/**/*"
     ],
     "mac": {
-      "category": "public.app-category.internet",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "entitlements.mac.plist",
-      "entitlementsInherit": "entitlements.mac.plist",
       "target": [
-        "dmg"
+        "dir"
       ]
     },
     "linux": {
       "target": [
-        "AppImage"
+        "dir"
       ],
       "category": "Network",
       "icon": "packaging/icons",
@@ -152,8 +147,8 @@
     "lzma-native@8.0.6": true
   },
   "dependencies": {
+    "electron-packager": "^17.1.2",
     "electron-updater": "^6.3.0",
-    "lzma-native": "^8.0.6",
     "sql.js": "^1.14.1"
   }
 }

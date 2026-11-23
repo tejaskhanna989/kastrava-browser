@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Kastrava
+Comment=Privacy-focused browser
+Exec=kastrava
+Icon=kastrava
+Type=Application
+Categories=Network;WebBrowser;
+StartupNotify=true

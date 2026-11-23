@@ -1,0 +1,154 @@
+{
+  "name": "kastrava",
+  "desktopName": "kastrava",
+  "version": "102.0.0",
+  "description": "Privacy-first browser",
+  "author": {
+    "name": "Kastrava",
+    "email": "email-center@kastrava.in"
+  },
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "npm run build:dev && electron .",
+    "build:dev": "webpack --mode development",
+    "build:prod": "node scripts/build-editions.js free",
+    "license:keygen": "node server/keygen.js",
+    "server": "node server/server.js",
+    "admin": "node server/admin.js",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.kastrasoft.kastrava",
+    "productName": "Kastrava",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist-free/**/*",
+      "static/**/*"
+    ],
+    "mac": {
+      "target": [
+        "dir"
+      ]
+    },
+    "linux": {
+      "target": [
+        "dir"
+      ],
+      "category": "Network",
+      "icon": "packaging/icons",
+      "syncDesktopName": true,
+      "desktop": {
+        "entry": {
+          "StartupWMClass": "Kastrava"
+        }
+      }
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "static/logo.ico",
+      "verifyUpdateCodeSignature": false,
+      "signtoolOptions": {
+        "sign": "./scripts/win-sign.js"
+      }
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "tejaskhanna989",
+      "repo": "kastrava"
+    },
+    "portable": {
+      "artifactName": "Kastrava-${version}.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Kastrava",
+      "artifactName": "Kastrava-Setup-${version}.exe",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    },
+    "deb": {
+      "artifactName": "kastrava_${version}_amd64.deb"
+    },
+    "pacman": {
+      "depends": [
+        "c-ares",
+        "ffmpeg",
+        "gtk3",
+        "libevent",
+        "libvpx",
+        "libxslt",
+        "libxss",
+        "minizip",
+        "nss",
+        "re2",
+        "snappy",
+        "libnotify"
+      ]
+    },
+    "appx": {
+      "applicationId": "Kastrava",
+      "identityName": "TejasKhanna.KastravaBrowser",
+      "displayName": "Kastrava Browser",
+      "publisher": "CN=B98E4B5A-8E53-46C4-BED3-FB49CC746FAC",
+      "publisherDisplayName": "Tejas Khanna",
+      "backgroundColor": "#0c0e13",
+      "languages": [
+        "en-US"
+      ]
+    },
+    "fileAssociations": [
+      {
+        "ext": [
+          "html",
+          "htm"
+        ],
+        "name": "HTML Document",
+        "description": "Open web pages in Kastrava",
+        "mimeType": "text/html",
+        "role": "Browser"
+      },
+      {
+        "ext": [
+          "http"
+        ],
+        "name": "HTTP URL",
+        "mimeType": "x-scheme-handler/http",
+        "role": "Browser"
+      },
+      {
+        "ext": [
+          "https"
+        ],
+        "name": "HTTPS URL",
+        "mimeType": "x-scheme-handler/https",
+        "role": "Browser"
+      }
+    ]
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^14.0.0",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "html-webpack-plugin": "^5.6.3",
+    "webpack": "^5.108.4",
+    "webpack-cli": "^6.0.1"
+  },
+  "allowScripts": {
+    "electron@35.7.5": true,
+    "lzma-native@8.0.6": true
+  },
+  "dependencies": {
+    "electron-packager": "^17.1.2",
+    "electron-updater": "^6.3.0",
+    "sql.js": "^1.14.1"
+  }
+}
