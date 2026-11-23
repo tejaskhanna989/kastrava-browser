@@ -48,7 +48,7 @@ jobs:
             ${{ github.workspace }}/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
       - run: npm ci --no-audit --no-fund
-      - name: Build premium bundle
+      - name: Build free bundle
         run: npm run build:prod
         env:
           KAS_API: https://api.kastrava.in
@@ -89,7 +89,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
       - run: sudo apt-get update && sudo apt-get install -y fakeroot rpm zstd libarchive-tools
       - run: npm ci --no-audit --no-fund
-      - name: Build premium bundle
+      - name: Build free bundle
         run: npm run build:prod
         env:
           KAS_API: https://api.kastrava.in
