@@ -1,12 +1,12 @@
 {
-  "version": "101.9.3",
-  "codename": "Triangular Galaxy",
-  "channel": "rc",
-  "url": "https://kastrava.in/dl/kastrava_101.9.3_amd64.deb",
-  "notes": "Kastrava 101.9.3 'Triangular Galaxy' — mobile search-results layout fixed (results no longer run off-screen on phones); AI Mode is now a single conversation with no chat list/sidebar, and chats are erased when you close the tab. Split view, Picture-in-Picture and vertical tabs are free for all users.",
-  "date": "2026-10-25",
+  "version": "102.0.0",
+  "codename": "Freedom Edition",
+  "channel": "stable",
+  "url": "https://kastrava.in/dl/kastrava_102.0.0_amd64.deb",
+  "notes": "Kastrava 102.0.0 'Freedom Edition' — All premium features are now free forever. Browser is completely open with no premium tiers. Added Chrome extension support. All privacy features unlocked for all users.",
+  "date": "2026-11-23",
   "minimum": "26.0.0",
-  "version_code": 1019003,
-  "apk_url": "https://kastrava.in/dl/Kastrava-101.9.3.apk",
+  "version_code": 1020000,
+  "apk_url": "https://kastrava.in/dl/Kastrava-102.0.0.apk",
   "apk_size": 8659816
 }
