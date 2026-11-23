@@ -738,23 +738,9 @@ var DEMO_ACCOUNT="reviewer@kastrava.in";
 var DEMO_MODE=false;
 function isDemo(){return DEMO_MODE;}
 var licRefreshed=false;
-function editionLabel(){if(EDITION==="free")return "Kastrava Orion";return LIC.activated?"Kastrava Proxima":"Kastrava Orion";}
-function isPremium(){
-  if(EDITION==="free")return false;
-  // Premium requires an active license that hasn't expired.
-  if(!LIC||!LIC.activated)return false;
-  if(LIC.expiresAt){
-    var exp=new Date(LIC.expiresAt).getTime();
-    if(!isNaN(exp)&&Date.now()>=exp){
-      // Expired — mark grace and downgrade
-      LIC.grace=true;
-      LIC.reason="expired";
-      return false;
-    }
-  }
-  return true;
-}
-function requirePremium(){return isPremium();}
+function editionLabel(){return "Kastrava";}
+function isPremium(){return true;}
+function requirePremium(){return true;}
 function $(id){return document.getElementById(id)}
 function qa(sel){return document.querySelectorAll(sel)}
 function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}

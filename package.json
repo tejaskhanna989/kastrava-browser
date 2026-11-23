@@ -11,7 +11,7 @@
   "scripts": {
     "start": "npm run build:dev && electron .",
     "build:dev": "webpack --mode development",
-    "build:prod": "node scripts/build-editions.js premium",
+    "build:prod": "node scripts/build-editions.js free",
     "license:keygen": "node server/keygen.js",
     "server": "node server/server.js",
     "admin": "node server/admin.js",

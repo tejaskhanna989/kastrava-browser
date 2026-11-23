@@ -102,23 +102,18 @@ function verifyPayload(payload, sig) {
 }
 
 function status() {
-  const lic = loadLicense()
   const code = machineCode()
-  if (!lic || !lic.payload) {
-    return { activated: false, edition: 'premium', machine: code, key: null, acc: null, reason: 'no_license', expiresAt: null, subEnd: null, grace: false }
-  }
-  const v = verifyPayload(lic.payload, lic.sig)
   return {
-    activated: v.ok,
-    edition: 'premium',
+    activated: true,
+    edition: 'free',
     machine: code,
-    key: lic.key || null,
-    acc: (lic.payload && lic.payload.acc) || null,
-    reason: v.reason || null,
-    expiresAt: v.ok && lic.payload.exp ? lic.payload.exp * 1000 : null,
-    subEnd: v.ok && lic.payload.sub_end ? lic.payload.sub_end * 1000 : null,
-    grace: v.ok && !!v.grace,
-    iat: lic.payload.iat ? lic.payload.iat * 1000 : null
+    key: null,
+    acc: null,
+    reason: null,
+    expiresAt: null,
+    subEnd: null,
+    grace: false,
+    iat: null
   }
 }
 
