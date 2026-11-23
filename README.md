@@ -10,7 +10,7 @@ Linux, Windows and Android builds live in this repo. The project site is [kastra
 
 Kastrava is completely free, forever — full source, build scripts, pre-built binaries, every feature, no crippled free tier. `git clone` and go.
 
-The browser is funded by donations from users like you. If you find Kastrava useful, please consider supporting the project through our donation options on the website.
+The browser is funded by donations from users like you. If you find Kastrava useful, please consider supporting the project through our donation options on the website (PayPal and Razorpay only).
 
 ## Privacy Features
 
@@ -52,15 +52,7 @@ I'd rather you verify this than take my word for it. Everything below is in the 
 No account, no browsing telemetry, ever. The core browser works offline after install. Beyond that:
 
 * **Update check (automatic, anonymous)**: on launch the app asks GitHub for `latest.yml` — version numbers only, no identifiers. AppImage builds skip it by choice, and blocking it breaks nothing.
-* **License refresh (Premium only)**: logged-in Premium installs re-validate the key once on launch (device ID + key, once). Free tier and logged-out installs contact nothing.
-* **Sync (only if logged in)**: encrypted blobs go up on local change and down on login. The server never sees plaintext.
-* **Store, account dashboard, support**: ordinary HTTPS page loads, only when you open them. Browsing the web never touches our servers.
-* **Zero telemetry**: no analytics, no crash reports, no update pings with identifiers. License activation sends one device ID and the key, once, and the app works fully offline after that.
-* **Sync**, if you turn it on, uploads encrypted blobs the server stores but cannot read. Changing your password deliberately destroys the old synced copy — new password means new key.
-* **Store, account dashboard, support**: ordinary HTTPS page loads, only when you open them. Browsing the web never touches our servers.
-* **Zero telemetry**: no analytics, no crash reports, no update pings with identifiers. License activation sends one device ID and the key, once, and the app works fully offline after that.
-* **Sync**, if you turn it on, uploads encrypted blobs the server stores but cannot read. Changing your password deliberately destroys the old synced copy — new password means new key.
-* **Store, account dashboard, support**: ordinary HTTPS page loads, only when you open them. Browsing the web never touches our servers.
+* **Store, support**: ordinary HTTPS page loads, only when you open them. Browsing the web never touches our servers.
 
 ## Chrome Extensions
 
@@ -84,7 +76,7 @@ Android builds come from `android/` with the usual Gradle tasks.
 
 Fork it, make a branch (`git checkout -b feature/whatever`), commit, push, open a PR. That's the whole process.
 
-Kastrava is funded by donations from users like you. If you find Kastrava useful, please consider supporting the project through our donation options on the website.
+Kastrava is funded by donations from users like you. If you find Kastrava useful, please consider supporting the project through our donation options on the website (PayPal and Razorpay only).
 
 ## License
 
@@ -114,7 +106,7 @@ Android builds come from `android/` with the usual Gradle tasks.
 
 Fork it, make a branch (`git checkout -b feature/whatever`), commit, push, open a PR. That's the whole process.
 
-Premium funds the project ([pricing here](https://kastrava.in/#premium)). For priority support, consultation or sponsorship, write to email-center@kastrava.in.
+Donations fund the project. For priority support, consultation or sponsorship, write to email-center@kastrava.in.
 
 ## License
 
