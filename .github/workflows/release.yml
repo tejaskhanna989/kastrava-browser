@@ -121,7 +121,9 @@ jobs:
           status=$?
           cat /tmp/arch-build.log
           if [ "$status" -ne 0 ]; then
-            while IFS= read -r line; do echo "::error title=Arch build detail::$line"; done < <(tail -n 20 /tmp/arch-build.log)
+            grep -Ei 'error|failed|cannot|not found|missing|permission denied|fatal|unsupported' /tmp/arch-build.log | tail -n 12 > /tmp/arch-errors.log || true
+            if [ ! -s /tmp/arch-errors.log ]; then tail -n 12 /tmp/arch-build.log > /tmp/arch-errors.log; fi
+            while IFS= read -r line; do echo "::error title=Arch build detail::$line"; done < /tmp/arch-errors.log
           fi
           if [ "$status" -ne 0 ]; then exit "$status"; fi
           mkdir -p release
