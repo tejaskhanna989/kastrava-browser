@@ -114,7 +114,6 @@ jobs:
           sed -i -E "s/^pkgver=.*/pkgver=${version}/" packaging/arch/PKGBUILD
           set +e
           docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
-            pacman -Syu --noconfirm --needed zstd
             useradd -m packagebuilder
             chown -R packagebuilder:packagebuilder .
             su packagebuilder -c "makepkg -f --noconfirm"
