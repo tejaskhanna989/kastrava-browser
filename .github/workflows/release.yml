@@ -117,6 +117,9 @@ jobs:
           name: Kastrava-linux
           path: |
             release/*.AppImage
+            release/*.deb
+            release/*.rpm
+            release/*.pkg.tar.zst
             release/latest-linux.yml
             release/*.blockmap
           if-no-files-found: error
@@ -221,6 +224,7 @@ jobs:
           name: Kastrava ${{ inputs.release_version || github.ref_name }}
           tag_name: ${{ inputs.release_version || github.ref_name }}
           target_commitish: ${{ github.sha }}
+          overwrite_files: true
           files: |
             artifacts/Kastrava-win/*
             artifacts/Kastrava-linux/*
