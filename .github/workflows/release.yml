@@ -112,12 +112,19 @@ jobs:
         run: |
           version=$(node -p "require('./package.json').version")
           sed -i -E "s/^pkgver=.*/pkgver=${version}/" packaging/arch/PKGBUILD
+          set +e
           docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
             pacman -Syu --noconfirm --needed zstd
             useradd -m packagebuilder
             chown -R packagebuilder:packagebuilder .
             su packagebuilder -c "makepkg -f --noconfirm"
-          '
+          ' > /tmp/arch-build.log 2>&1
+          status=$?
+          cat /tmp/arch-build.log
+          if [ "$status" -ne 0 ]; then
+            while IFS= read -r line; do echo "::error title=Arch build detail::$line"; done < <(tail -n 20 /tmp/arch-build.log)
+          fi
+          if [ "$status" -ne 0 ]; then exit "$status"; fi
           mkdir -p release
           mv packaging/arch/kastrava-*.pkg.tar.zst release/
       - name: Create release directory structure
