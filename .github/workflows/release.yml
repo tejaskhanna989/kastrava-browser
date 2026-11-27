@@ -37,7 +37,7 @@ env:
 
 jobs:
   windows:
-    if: ${{ inputs.build_windows != 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_windows }}
     runs-on: windows-latest
     timeout-minutes: 60
     outputs:
@@ -79,7 +79,7 @@ jobs:
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
   linux:
-    if: ${{ inputs.build_linux != 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_linux }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     outputs:
@@ -121,6 +121,7 @@ jobs:
           status=$?
           cat /tmp/arch-build.log
           if [ "$status" -ne 0 ]; then
+            echo "::error title=Arch build status::exit=$status; log-bytes=$(wc -c < /tmp/arch-build.log)"
             grep -Ei 'error|failed|cannot|not found|missing|permission denied|fatal|unsupported' /tmp/arch-build.log | tail -n 12 > /tmp/arch-errors.log || true
             if [ ! -s /tmp/arch-errors.log ]; then tail -n 12 /tmp/arch-build.log > /tmp/arch-errors.log; fi
             while IFS= read -r line; do echo "::error title=Arch build detail::$line"; done < /tmp/arch-errors.log
@@ -148,7 +149,7 @@ jobs:
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
   macos:
-    if: ${{ inputs.build_macos != 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_macos }}
     runs-on: macos-latest
     timeout-minutes: 60
     outputs:
@@ -189,7 +190,7 @@ jobs:
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
   android:
-    if: ${{ inputs.build_android != 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_android }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     defaults:
