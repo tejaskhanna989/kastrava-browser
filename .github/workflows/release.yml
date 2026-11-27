@@ -119,11 +119,14 @@ jobs:
           sed -i -E "s/^pkgver=.*/pkgver=${version}/" packaging/arch/PKGBUILD
           status=$?
           docker_status=0
+          host_uid=$(id -u)
+          host_gid=$(id -g)
           if [ "$status" -eq 0 ]; then
-            docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
+            docker run --rm -e HOST_UID="$host_uid" -e HOST_GID="$host_gid" -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
               useradd -m packagebuilder
               chown -R packagebuilder:packagebuilder .
               su packagebuilder -c "makepkg -f --nodeps --noconfirm"
+              chown "$HOST_UID:$HOST_GID" . ./*.pkg.tar.zst
             ' > /tmp/arch-build.log 2>&1
             docker_status=$?
             status=$docker_status
