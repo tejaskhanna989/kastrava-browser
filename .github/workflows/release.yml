@@ -109,27 +109,35 @@ jobs:
         env:
           ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache
       - name: Build Arch package
+        id: arch-build
         run: |
+          set +e
           version=$(node -p "require('./package.json').version")
           sed -i -E "s/^pkgver=.*/pkgver=${version}/" packaging/arch/PKGBUILD
-          set +e
-          docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
-            useradd -m packagebuilder
-            chown -R packagebuilder:packagebuilder .
-            su packagebuilder -c "makepkg -f --nodeps --noconfirm"
-          ' > /tmp/arch-build.log 2>&1
           status=$?
-          cat /tmp/arch-build.log
-          if [ "$status" -ne 0 ]; then
-            echo "::error title=Arch build status::exit=$status; log-bytes=$(wc -c < /tmp/arch-build.log)"
-            grep -Ei 'error|failed|cannot|not found|missing|permission denied|fatal|unsupported' /tmp/arch-build.log | tail -n 12 > /tmp/arch-errors.log || true
-            if [ ! -s /tmp/arch-errors.log ]; then tail -n 12 /tmp/arch-build.log > /tmp/arch-errors.log; fi
-            encoded_log=$(tail -c 3000 /tmp/arch-build.log | base64 -w0)
-            echo "::error title=Arch diagnostic log (base64)::$encoded_log"
+          if [ "$status" -eq 0 ]; then
+            docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
+              useradd -m packagebuilder
+              chown -R packagebuilder:packagebuilder .
+              su packagebuilder -c "makepkg -f --nodeps --noconfirm"
+            ' > /tmp/arch-build.log 2>&1
+            status=$?
           fi
-          if [ "$status" -ne 0 ]; then exit "$status"; fi
-          mkdir -p release
-          mv packaging/arch/kastrava-*.pkg.tar.zst release/
+          cat /tmp/arch-build.log 2>/dev/null || true
+          if [ "$status" -eq 0 ]; then
+            mkdir -p release && mv packaging/arch/kastrava-*.pkg.tar.zst release/
+            status=$?
+          fi
+          if [ "$status" -ne 0 ]; then
+            detail=$(tail -n 8 /tmp/arch-build.log 2>/dev/null | tr '\n' ' ' | tr -cd '[:print:]' | cut -c1-300)
+            echo "status=$status" >> "$GITHUB_OUTPUT"
+            echo "detail=$detail" >> "$GITHUB_OUTPUT"
+            echo "Arch build failed (exit $status): $detail"
+          fi
+          exit 0
+      - name: Report Arch packaging failure - ${{ steps.arch-build.outputs.detail }}
+        if: steps.arch-build.outputs.status != ''
+        run: exit 1
       - name: Upload Arch build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
