@@ -81,6 +81,9 @@ jobs:
   linux:
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_linux }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     timeout-minutes: 60
     outputs:
       version: ${{ steps.get-version.outputs.version }}
@@ -115,29 +118,53 @@ jobs:
           version=$(node -p "require('./package.json').version")
           sed -i -E "s/^pkgver=.*/pkgver=${version}/" packaging/arch/PKGBUILD
           status=$?
+          docker_status=0
           if [ "$status" -eq 0 ]; then
             docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
               useradd -m packagebuilder
               chown -R packagebuilder:packagebuilder .
               su packagebuilder -c "makepkg -f --nodeps --noconfirm"
             ' > /tmp/arch-build.log 2>&1
-            status=$?
+            docker_status=$?
+            status=$docker_status
           fi
           cat /tmp/arch-build.log 2>/dev/null || true
+          package_files=$(find packaging/arch -maxdepth 1 -name '*.pkg.tar.zst' -printf '%f,' 2>/dev/null)
           if [ "$status" -eq 0 ]; then
             mkdir -p release && mv packaging/arch/kastrava-*.pkg.tar.zst release/
             status=$?
           fi
           if [ "$status" -ne 0 ]; then
-            detail=$(tail -n 8 /tmp/arch-build.log 2>/dev/null | tr '\n' ' ' | tr -cd '[:print:]' | cut -c1-300)
+            detail="docker=$docker_status; files=$package_files; $(tail -c 180 /tmp/arch-build.log 2>/dev/null | tr '\n' ' ' | tr -cd '[:print:]')"
             echo "status=$status" >> "$GITHUB_OUTPUT"
             echo "detail=$detail" >> "$GITHUB_OUTPUT"
             echo "Arch build failed (exit $status): $detail"
           fi
           exit 0
-      - name: Report Arch packaging failure - ${{ steps.arch-build.outputs.detail }}
+      - name: Report Arch packaging failure
         if: steps.arch-build.outputs.status != ''
-        run: exit 1
+        uses: actions/github-script@v7
+        env:
+          ARCH_FAILURE_STATUS: ${{ steps.arch-build.outputs.status }}
+          ARCH_FAILURE_DETAIL: ${{ steps.arch-build.outputs.detail }}
+        with:
+          script: |
+            const fs = require('fs');
+            const log = fs.existsSync('/tmp/arch-build.log') ? fs.readFileSync('/tmp/arch-build.log', 'utf8') : '(no Arch build log created)';
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Arch packaging diagnostics',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'failure',
+              output: {
+                title: `Arch package failed (exit ${process.env.ARCH_FAILURE_STATUS})`,
+                summary: process.env.ARCH_FAILURE_DETAIL || 'No short failure detail available.',
+                text: log,
+              },
+            });
+            core.setFailed(`Arch packaging failed: ${process.env.ARCH_FAILURE_DETAIL || 'see diagnostic check run'}`);
       - name: Upload Arch build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
