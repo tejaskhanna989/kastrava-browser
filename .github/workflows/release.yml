@@ -22,6 +22,10 @@ on:
         description: 'Build macOS app'
         type: boolean
         default: true
+      release_version:
+        description: 'Optional tag to publish from this build (e.g. v102.0.1)'
+        type: string
+        default: ''
   push:
     tags: ["v*"]
 
@@ -207,15 +211,16 @@ jobs:
   publish:
     needs: [windows, linux, macos, android]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.release_version != '')
     steps:
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
       - uses: softprops/action-gh-release@v2
         with:
-          name: Kastrava ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          name: Kastrava ${{ inputs.release_version || github.ref_name }}
+          tag_name: ${{ inputs.release_version || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: |
             artifacts/Kastrava-win/*
             artifacts/Kastrava-linux/*
