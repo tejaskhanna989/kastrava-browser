@@ -129,6 +129,13 @@ jobs:
           if [ "$status" -ne 0 ]; then exit "$status"; fi
           mkdir -p release
           mv packaging/arch/kastrava-*.pkg.tar.zst release/
+      - name: Upload Arch build diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arch-build-diagnostics
+          path: /tmp/arch-build.log
+          if-no-files-found: warn
       - name: Create release directory structure
         run: |
           mkdir -p release
