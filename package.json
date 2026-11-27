@@ -28,6 +28,9 @@
       "dist-free/**/*",
       "static/**/*"
     ],
+    "extraMetadata": {
+      "main": "dist-free/main.js"
+    },
     "mac": {
       "target": [
         "dmg"

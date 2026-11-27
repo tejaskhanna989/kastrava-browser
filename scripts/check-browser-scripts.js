@@ -10,8 +10,17 @@ const htmlPaths = [
   path.join(projectRoot, 'src', 'browser.html'),
   path.join(projectRoot, 'dist-free', 'browser.html')
 ]
+const packageJson = JSON.parse(fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8'))
+const packagedMain = packageJson.build?.extraMetadata?.main || packageJson.main
 let totalScripts = 0
 let failures = 0
+
+if (!fs.existsSync(path.join(projectRoot, packagedMain))) {
+  console.error(`Packaged Electron entry point does not exist: ${packagedMain}`)
+  failures += 1
+} else {
+  console.log(`Packaged Electron entry point: ${packagedMain}`)
+}
 
 for (const htmlPath of htmlPaths) {
   if (!fs.existsSync(htmlPath)) {
