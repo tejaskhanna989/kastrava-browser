@@ -116,7 +116,7 @@ jobs:
           docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
             useradd -m packagebuilder
             chown -R packagebuilder:packagebuilder .
-            su packagebuilder -c "makepkg -f --noconfirm"
+            su packagebuilder -c "makepkg -f --nodeps --noconfirm"
           ' > /tmp/arch-build.log 2>&1
           status=$?
           cat /tmp/arch-build.log
