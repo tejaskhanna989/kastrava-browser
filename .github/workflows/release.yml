@@ -124,7 +124,8 @@ jobs:
             echo "::error title=Arch build status::exit=$status; log-bytes=$(wc -c < /tmp/arch-build.log)"
             grep -Ei 'error|failed|cannot|not found|missing|permission denied|fatal|unsupported' /tmp/arch-build.log | tail -n 12 > /tmp/arch-errors.log || true
             if [ ! -s /tmp/arch-errors.log ]; then tail -n 12 /tmp/arch-build.log > /tmp/arch-errors.log; fi
-            while IFS= read -r line; do echo "::error title=Arch build detail::$line"; done < /tmp/arch-errors.log
+            encoded_log=$(tail -c 3000 /tmp/arch-build.log | base64 -w0)
+            echo "::error title=Arch diagnostic log (base64)::$encoded_log"
           fi
           if [ "$status" -ne 0 ]; then exit "$status"; fi
           mkdir -p release
