@@ -40,8 +40,7 @@
       "target": [
         "AppImage",
         "deb",
-        "rpm",
-        "pacman"
+        "rpm"
       ],
       "category": "Network",
       "icon": "packaging/icons",

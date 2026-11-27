@@ -7,9 +7,11 @@ arch=('x86_64')
 url="https://kastrava.in"
 license=('MIT')
 depends=('alsa-lib' 'gtk3' 'libxss' 'nss')
+source=()
+sha256sums=()
 options=('!strip')
-_src="/home/tejas/Projects/antersurf/release/linux-unpacked"
-_static="/home/tejas/Projects/antersurf/static/logo.png"
+_src="$startdir/../../release/linux-unpacked"
+_static="$startdir/../../static/logo.png"
 
 package() {
   install -dm755 "$pkgdir/opt/Kastrava"

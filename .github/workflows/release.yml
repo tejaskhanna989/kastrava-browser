@@ -104,10 +104,22 @@ jobs:
         env:
           KAS_API: https://api.kastrava.in
           KAS_STORE: https://kastrava.in
-      - name: Package Linux AppImage
+      - name: Package Linux formats
         run: npx electron-builder --linux --x64 --publish never
         env:
           ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache
+      - name: Build Arch package
+        run: |
+          version=$(node -p "require('./package.json').version")
+          sed -i -E "s/^pkgver=.*/pkgver=${version}/" packaging/arch/PKGBUILD
+          docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/packaging/arch archlinux:base-devel bash -euc '
+            pacman -Syu --noconfirm --needed zstd
+            useradd -m packagebuilder
+            chown -R packagebuilder:packagebuilder .
+            su packagebuilder -c "makepkg -f --noconfirm"
+          '
+          mkdir -p release
+          mv packaging/arch/kastrava-*.pkg.tar.zst release/
       - name: Create release directory structure
         run: |
           mkdir -p release
