@@ -1,7 +1,7 @@
 {
   "name": "kastrava",
   "desktopName": "kastrava",
-  "version": "102.0.0",
+  "version": "102.0.1",
   "description": "Privacy-first browser",
   "author": {
     "name": "Kastrava",
@@ -10,6 +10,7 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "npm run build:dev && electron .",
+    "check:browser": "node scripts/check-browser-scripts.js",
     "build:dev": "webpack --mode development",
     "build:prod": "node scripts/build-editions.js free",
     "license:keygen": "node server/keygen.js",
@@ -29,12 +30,12 @@
     ],
     "mac": {
       "target": [
-        "dir"
+        "dmg"
       ]
     },
     "linux": {
       "target": [
-        "dir"
+        "AppImage"
       ],
       "category": "Network",
       "icon": "packaging/icons",
@@ -47,7 +48,8 @@
     },
     "win": {
       "target": [
-        "nsis"
+        "nsis",
+        "portable"
       ],
       "icon": "static/logo.ico",
       "verifyUpdateCodeSignature": false,

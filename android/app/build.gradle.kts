@@ -11,9 +11,9 @@ android {
         applicationId = "in.kastrava.browser"
         minSdk = 26
         targetSdk = 34
-        // Mirrors the desktop release: 101.9.3.
-        versionCode = 1019003
-        versionName = "101.9.3"
+        // Mirrors the desktop release version.
+        versionCode = 1020001
+        versionName = "102.0.1"
     }
 
     flavorDimensions += "market"
